@@ -1,11 +1,39 @@
 # WarpDrive: the Go version.
 
+![image](https://user-images.githubusercontent.com/38882631/160743437-f5ae7827-bbfb-4dcb-bc01-ecef6a814162.png)
+
 
 ## What does this do?
 
-Instead of having a huge cd routine to get where you want, with WarpDrive you use short keywords to warp to the directory in ~8 ms.
+Instead of having a huge cd routine to get where you want, with WarpDrive you use short keywords to warp to the directory in ~5 ms.
 
-See github.com/quackduck/WarpDrive for more info, that repo has the earlier, slower, Java version of this.
+## Help
+
+```yaml
+WarpDrive - Warp across the filesystem instantly
+
+Usage: wd [<pattern> ...]
+       wd --list/-l | --help/-h | --version/-v
+       wd {--add/-a | --remove/-r} <path>
+Options:
+   --list/-l     List currently tracked paths along with their frecency scores
+   --add/-a      Add a path to the data file (paths will be added automatically)
+   --remove/-r   Remove a path from the data file
+   --help/-h     Print this help message
+   --version/-v  Print the version of WarpDrive installed
+Examples:
+   wd -l                          # list all tracked paths and scores
+   wd                             # cd to home directory
+   wd s                           # tries to match 's'
+   wd someDir                     # tries to match 'someDir'
+   wd some subDir                 # ensures matched path also contains 'some'
+   wd /absolute/path/to/someDir   # absolute paths work too
+Note:
+   When specifying multiple patterns, order does not matter, except for the last pattern.
+   WarpDrive will always cd to a directory that matches the last pattern.
+```
+
+Related: https://github.com/quackduck/WarpDrive. That repo has the earlier, slower, Java version of this.
 
 ## Install directions
 
