@@ -47,12 +47,29 @@ Note:
 )
 
 func main() {
+	if ok, _ := ArgsHaveOption("help", "h"); ok {
+		fmt.Println(helpText)
+		return
+	}
+
+	if ok, _ := ArgsHaveOption("version", "v"); ok {
+		fmt.Println("WarpDrive " + version)
+		return
+	}
+
 	dataFile, err := os.UserHomeDir()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	dataFile += "/.warpdrive-data.json"
+
+	err = os.MkdirAll(filepath.Join(dataFile, ".config", "warpdrive"), 0755)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	dataFile = filepath.Join(dataFile, ".config", "warpdrive", "data.json")
 
 	data, err = readFromFileAsJSON(dataFile)
 	data = normalizeData()
@@ -73,16 +90,6 @@ func main() {
 
 	if ok, _ := ArgsHaveOption("list", "l"); ok {
 		listAllPaths()
-		return
-	}
-
-	if ok, _ := ArgsHaveOption("help", "h"); ok {
-		fmt.Println(helpText)
-		return
-	}
-
-	if ok, _ := ArgsHaveOption("version", "v"); ok {
-		fmt.Println("WarpDrive " + version)
 		return
 	}
 
@@ -223,9 +230,9 @@ func getBestMatch(pattern string) string {
 		// path must have all the words in the pattern
 		if stringContainsAllElemsInArr(entry.Path, pattenSplitOnSpaces) {
 			// path's last element must have the pattern's last element
-			patternLastElemSplitOnSlash := strings.Split(pattenSplitOnSpaces[len(pattenSplitOnSpaces)-1], "/")
-			if strings.Contains(splitCandidate[len(splitCandidate)-1],
-				patternLastElemSplitOnSlash[len(patternLastElemSplitOnSlash)-1]) {
+			patternLastElemSplitOnSlash := strings.Split(pattenSplitOnSpaces[len(pattenSplitOnSpaces)-1], string(os.PathSeparator))
+			if strings.Contains(strings.ToLower(splitCandidate[len(splitCandidate)-1]),
+				strings.ToLower(patternLastElemSplitOnSlash[len(patternLastElemSplitOnSlash)-1])) {
 				candidates = append(candidates, entry)
 			}
 		}
@@ -239,7 +246,7 @@ func getBestMatch(pattern string) string {
 
 func stringContainsAllElemsInArr(searchIn string, searchArr []string) bool {
 	for _, s := range searchArr {
-		if !strings.Contains(searchIn, s) {
+		if !strings.Contains(strings.ToLower(searchIn), strings.ToLower(s)) {
 			return false
 		}
 	}
