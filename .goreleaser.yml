@@ -58,5 +58,5 @@ brews:
     install: |
       bin.install "wd-go"
       fish_function.install "fish-support/wd.fish"
-      fish_function.install "fish-support/wd-go_on_prompt.fish"
+      (share/"fish/vendor_conf.d").install "fish-support/wd-go_on_prompt.fish"
       (prefix/"etc/profile.d").install "bash-zsh-support/wd.sh"
