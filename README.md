@@ -53,7 +53,7 @@ Related: https://github.com/quackduck/WarpDrive. That repo has the earlier, slow
 1. Put `windows-support\wd-go_on_prompt.bat` and `windows-support\wd.bat` in a directory of your choice.
 2. Compile the go module into a .exe file and put that in the same directory.
 3. Add the directory to the `PATH` environment variable
-4. Make a script that runs when command prompt is opened by refering to https://superuser.com/a/916478.
+4. Make a script that runs when command prompt is opened: https://superuser.com/a/916478.
 5. In the script add the line `doskey cd=wd-go_on_prompt $*`
 6. Profit!
 
