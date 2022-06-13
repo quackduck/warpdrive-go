@@ -49,6 +49,14 @@ Related: https://github.com/quackduck/WarpDrive. That repo has the earlier, slow
 3. Run `go install` in this directory
 4. Profit!
 
+### If you're a windows command prompt user:
+1. Put `windows-support\wd-go_on_prompt.bat` and `windows-support\wd.bat` in a directory of your choice.
+2. Compile the go module into a .exe file and put that in the same directory.
+3. Add the directory to the `PATH` environment variable
+4. Make a script that runs when command prompt is opened https://superuser.com/a/916478
+5. In the script add the line `doskey cd=wd-go_on_prompt $*`
+6. Profit!
+
 ### If you use some other shell:
 Make a PR to add support for your shell. Adding support for other shells is easier than for similar programs. All you need is:
 1. A way for `wd` to add a new directory when you use `cd`
