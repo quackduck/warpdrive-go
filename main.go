@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"math"
 	"os"
 	"path/filepath"
@@ -142,10 +141,9 @@ func normalizeData() []Entry {
 	sortData()
 	for i := range data {
 		exists, err := pathExists(data[i].Path)
-		if score(data[i]) == 0 || !exists {
+		if score(data[i]) < 1 || !exists {
 			data = append(data[:i], data[i+1:]...)
-			//errPrintln(len(data), i)
-			if i <= len(data)-1 {
+			if i >= len(data)-1 {
 				break
 			}
 		}
@@ -176,7 +174,12 @@ func errPrintln(a ...interface{}) {
 func listAllPaths() {
 	fmt.Println("Score\t\tPath")
 	for _, e := range data {
-		fmt.Printf("%.0f\t\t%s\n", score(e), e.Path)
+		s := score(e)
+		if s < 10 {
+			fmt.Printf("%.1f\t\t%s\n", s, e.Path)
+			continue
+		}
+		fmt.Printf("%.0f\t\t%s\n", s, e.Path)
 	}
 }
 
@@ -265,15 +268,13 @@ func score(e Entry) float64 {
 		return 0
 	}
 	//log := math.Round(100 * float64(e.Frequency) * math.Exp(-0.0001*time.Since(t).Minutes()))
-	result := math.Round(
-		1000 * float64(e.Frequency) * math.Exp2(
-			-(time.Since(t).Minutes()+28000)/(4*60*24), // halve every four days
-		),
+	result := 1000 * float64(e.Frequency) * math.Exp2(
+		-(time.Since(t).Minutes()+58000)/(9*60*24), // halve every nine days
 	)
 	//os.Stderr.WriteString(fmt.Sprintln(e.Path, e.Frequency, time.Since(t).Minutes(), result))
-	if result < 0 {
-		return 0
-	}
+	//if result < 0 {
+	//	return 0
+	//}
 	return result
 	//return math.Round(
 	//	300 * math.Sqrt(
@@ -297,11 +298,11 @@ func writeToFileAsJSON(data []Entry, fileName string) error {
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(fileName, b, 0644)
+	return os.WriteFile(fileName, b, 0644)
 }
 
 func readFromFileAsJSON(fileName string) ([]Entry, error) {
-	b, err := ioutil.ReadFile(fileName)
+	b, err := os.ReadFile(fileName)
 	if err != nil {
 		return nil, err
 	}
