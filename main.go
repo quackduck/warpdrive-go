@@ -149,7 +149,7 @@ func normalizeData() []Entry {
 			errPrintln(err)
 		}
 	}
-	return data
+	return temp
 }
 
 func pathExists(path string) (bool, error) {
