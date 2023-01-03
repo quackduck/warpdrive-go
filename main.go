@@ -139,17 +139,18 @@ func main() {
 
 func normalizeData() []Entry {
 	sortData()
-	temp := data[:0] // uses the same underlying array: https://github.com/golang/go/wiki/SliceTricks#filtering-without-allocating
+	curr := 0
 	for _, entry := range data {
 		exists, err := pathExists(entry.Path)
 		if score(entry) > 1 && exists {
-			temp = append(temp, entry)
+			data[curr] = entry
+			curr++
 		}
 		if err != nil {
 			errPrintln(err)
 		}
 	}
-	return temp
+	return data[:curr]
 }
 
 func pathExists(path string) (bool, error) {
